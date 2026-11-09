@@ -111,8 +111,8 @@
     var b = document.createElement("button"); b.type="button"; b.className="day";
     var closed = d.getDay()===1;
     b.disabled = closed; b.setAttribute("aria-pressed","false");
-    b.setAttribute("aria-label", longDate.format(d) + (closed ? ", выходной" : ""));
-    b.innerHTML = "<small>"+(i===0?"сегодня":wd.format(d).replace(".",""))+"</small><b class=\"num\">"+d.getDate()+"</b>";
+    b.setAttribute("aria-label", (i===0?"сегодня, ":"") + longDate.format(d) + (closed ? ", выходной" : ""));
+    b.innerHTML = "<small>"+wd.format(d).replace(".","")+"</small><b class=\"num\">"+d.getDate()+"</b>";
     b.addEventListener("click", function(){ state.day = i; state.slot = null; renderDays(); renderSlots(); update(); });
     daysEl.appendChild(b);
   });
@@ -218,10 +218,10 @@
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
         if (en.target.id==="booking") vis.booking = en.isIntersecting || en.boundingClientRect.top > 0;
-        else vis.contacts = en.isIntersecting;
+        else vis[en.target.id||"foot"] = en.isIntersecting;
       });
-      sticky.hidden = vis.booking || vis.contacts;
+      sticky.hidden = vis.booking || vis.contacts || vis.foot;
     }, {threshold:0});
-    io.observe($("booking")); io.observe($("contacts"));
+    io.observe($("booking")); io.observe($("contacts")); io.observe(document.querySelector("footer.site"));
   }
 })();

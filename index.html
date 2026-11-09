@@ -32,6 +32,11 @@
   /* radius rule: panels 18px, inputs and menus 12px, buttons and chips are pills */
   --r-panel:18px; --r-input:12px; --r-pill:999px;
   --ease:cubic-bezier(.22,1,.36,1);
+  /* spacing scale: fluid between phone and wide desktop */
+  --gutter:clamp(16px,3vw,48px);
+  --section:clamp(72px,8.5vw,136px);
+  --section-sm:clamp(56px,6vw,96px);
+  --space-head:clamp(32px,3.6vw,56px); /* heading to content */
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -56,7 +61,7 @@ img{max-width:100%;display:block}
 [hidden]{display:none!important}
 a{color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
-.wrap{max-width:1200px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
+.wrap{max-width:1520px;margin:0 auto;padding-left:max(var(--gutter), env(safe-area-inset-left, 0px));padding-right:max(var(--gutter), env(safe-area-inset-right, 0px))}
 h1,h2,h3{font-weight:400;letter-spacing:-.025em;line-height:1.08;margin:0;text-wrap:balance}
 h2{font-size:clamp(30px,4vw,46px)}
 p{margin:0}
@@ -72,21 +77,22 @@ p{margin:0}
 
 /* header: solid, no glass */
 .top{background:var(--bg);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:24px}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:clamp(56px,5vw,72px);gap:24px}
 .logo{font-size:24px;font-weight:500;letter-spacing:-.045em;text-decoration:none}
 .nav{display:flex;gap:28px;font-size:15px}
 .nav a{text-decoration:none;color:var(--muted)}
 .nav a:hover{color:var(--ink)}
-.phone-top{font-size:15px;text-decoration:none}
+.phone-top{font-size:15px;text-decoration:none;white-space:nowrap}
+.phone-top:hover{color:var(--accent)}
 @media (max-width:860px){.nav{display:none}}
 
 /* hero: the room photo is the stage, booking sits on it */
-.hero{padding-block:20px 0}
-.stage{display:grid;grid-template-columns:minmax(0,1fr) 420px;min-height:min(720px,calc(100dvh - 104px))}
+.hero{padding-block:clamp(8px,1.4vw,20px) 0}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) clamp(380px,29vw,450px);min-height:min(780px,calc(100dvh - 100px))}
 .hero-photo{grid-column:1/-1;grid-row:1;margin:0;border-radius:var(--r-panel);overflow:hidden;position:relative;background:oklch(0.3 0.05 355)}
 .hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 62%;filter:saturate(.85)}
 .hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,oklch(0.17 0.02 350 / .82) 0%,oklch(0.17 0.02 350 / .6) 36%,oklch(0.17 0.02 350 / .18) 66%,oklch(0.17 0.02 350 / .05) 100%)}
-.copy{grid-column:1;grid-row:1;z-index:1;align-self:end;padding:56px 48px 52px 56px;color:var(--on-photo)}
+.copy{grid-column:1;grid-row:1;z-index:1;align-self:end;padding:clamp(40px,4.5vw,80px);color:var(--on-photo)}
 .hero h1{font-size:clamp(40px,5vw,66px);font-weight:300;letter-spacing:-.045em;line-height:1.03;max-width:13ch;color:inherit}
 .hero-lead{margin-top:24px;max-width:34ch;font-size:19px;color:oklch(0.97 0.005 350 / .84)}
 .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
@@ -94,16 +100,17 @@ p{margin:0}
 .btn-photo:hover{border-color:var(--on-photo)}
 .place{margin-top:40px;font-size:15px;color:oklch(0.97 0.005 350 / .75);display:grid;gap:2px}
 .place b{font-weight:500;color:var(--on-photo)}
-.stage > .booking{grid-column:2;grid-row:1;z-index:2;align-self:center;margin:28px 28px 28px 0}
+.stage > .booking{grid-column:2;grid-row:1;z-index:2;align-self:center;margin:clamp(20px,2.2vw,36px) clamp(20px,2.2vw,36px) clamp(20px,2.2vw,36px) 0}
 @media (max-width:980px){
   .stage{grid-template-columns:1fr;min-height:0}
   .hero-photo{grid-column:1;grid-row:1;min-height:540px}
   .hero-photo::after{background:linear-gradient(180deg,oklch(0.17 0.02 350 / .15) 0%,oklch(0.17 0.02 350 / .45) 40%,oklch(0.17 0.02 350 / .88) 100%)}
-  .copy{padding:28px 22px 64px;align-self:end}
-  .stage > .booking{grid-column:1;grid-row:2;margin:-36px 10px 0}
+  .copy{padding:32px clamp(20px,4vw,40px) 72px;align-self:end}
+  .stage > .booking{grid-column:1;grid-row:2;margin:-40px 0 0;justify-self:center;width:min(100%,560px)}
   .place{margin-top:24px}
 }
-@media (max-width:420px){.hero-photo{min-height:560px}.copy{padding-inline:18px}}
+@media (max-width:420px){.hero-photo{min-height:560px}.copy{padding-inline:18px}.hero h1{font-size:38px}}
+@media (max-width:520px){.booking{padding:22px 16px 18px}.days{gap:4px}.slots{gap:5px}}
 .sticky-cta{position:fixed;z-index:30;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 12px 30px -10px oklch(0.25 0.06 355 / .55)}
 @media (min-width:761px){.sticky-cta{display:none!important}}
 
@@ -175,10 +182,16 @@ input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:tra
 
 
 /* services */
-.services{padding-block:104px 96px}
+.services{padding-block:var(--section)}
 .services h2{max-width:14ch}
 .services .intro{color:var(--muted);margin-top:18px;max-width:52ch}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:40px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:var(--space-head)}
+@media (max-width:640px){
+  .tabs{flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
+        margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scroll-padding-inline:var(--gutter)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none;scroll-snap-align:start}
+}
 .tab{height:42px;padding:0 18px;border-radius:var(--r-pill);border:1px solid var(--line);background:transparent;color:var(--ink);font:500 15px/1 var(--font);cursor:pointer}
 .tab:hover{border-color:var(--muted)}
 .tab[aria-selected="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
@@ -199,9 +212,9 @@ input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:tra
 .price-note{font-size:14px;color:var(--muted);margin-top:18px}
 
 /* visit timeline, to scale */
-.visit{padding-block:96px;background:var(--surface)}
+.visit{padding-block:var(--section);background:var(--surface)}
 .visit .sub{color:var(--muted);margin-top:16px;max-width:50ch}
-.tl{display:flex;gap:6px;margin-top:56px}
+.tl{display:flex;gap:6px;margin-top:var(--space-head)}
 .seg{display:grid;gap:10px;align-content:start;min-width:0}
 .seg .bar{height:10px;border-radius:var(--r-pill);background:var(--accent)}
 .seg:nth-child(even) .bar{background:color-mix(in oklab,var(--accent) 45%,var(--surface))}
@@ -215,8 +228,8 @@ input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:tra
 }
 
 /* specialist */
-.doc{padding-block:104px}
-.doc .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:72px;align-items:center}
+.doc{padding-block:var(--section)}
+.doc .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,6vw,112px);align-items:center}
 .doc figure{margin:0;border-radius:var(--r-panel);overflow:hidden;aspect-ratio:4/5;background:var(--accent-soft)}
 .doc figure img{width:100%;height:100%;object-fit:cover}
 .doc .role{color:var(--muted);margin-top:12px}
@@ -228,18 +241,18 @@ input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:tra
 @media (max-width:440px){.cv li{grid-template-columns:1fr;gap:2px}}
 
 /* reviews template */
-.reviews{padding-block:0 104px}
+.reviews{padding-block:0 var(--section)}
 .reviews .tmpl{font-size:15px;color:var(--muted);margin-top:16px;max-width:52ch}
-.quotes{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;margin-top:40px}
+.quotes{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:20px;margin-top:var(--space-head)}
 .quote{border:1px dashed var(--line);border-radius:var(--r-panel);padding:28px;display:grid;gap:24px;align-content:space-between;margin:0}
 .quote p{font-size:19px;line-height:1.5}
 .quote.big p{font-size:23px;font-weight:300}
 .quote footer{font-size:14px;color:var(--muted)}
-@media (max-width:760px){.quotes{grid-template-columns:1fr}}
+@media (max-width:760px){.quotes{grid-template-columns:1fr}.quote{padding:22px}.quote.big p{font-size:20px}.quote p{font-size:17px}}
 
 /* contacts */
-.contacts{background:var(--accent);color:var(--accent-ink);padding-block:80px}
-.contacts .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:start}
+.contacts{background:var(--accent);color:var(--accent-ink);padding-block:var(--section-sm)}
+.contacts .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(36px,5vw,96px);align-items:start}
 .contacts h2{color:inherit}
 .contacts .lead{margin-top:16px;opacity:.85;max-width:36ch}
 .contacts dl{display:grid;grid-template-columns:max-content 1fr;gap:16px 32px;margin:0;font-size:18px}
@@ -253,7 +266,7 @@ input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:tra
 @media (max-width:860px){.contacts .wrap{grid-template-columns:1fr;gap:36px}}
 @media (max-width:440px){.contacts dl{grid-template-columns:1fr;gap:2px}.contacts dd{margin-bottom:12px}}
 
-footer.site{padding-block:28px 40px;font-size:14px;color:var(--muted)}
+footer.site{padding-block:28px calc(40px + env(safe-area-inset-bottom,0px));font-size:14px;color:var(--muted)}
 footer.site .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 
 @media (prefers-reduced-motion:no-preference){
@@ -279,7 +292,7 @@ footer.site .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
       <a href="#doctor">Косметолог</a>
       <a href="#contacts">Адрес</a>
     </nav>
-    <span class="phone-top num">+7 391 200-00-00</span>
+    <a class="phone-top num" href="tel:+73912000000">+7 391 200-00-00</a>
   </div>
 </header>
 
