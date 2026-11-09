@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&display=swap">
 <style>
-/* Hero = text + the live booking tool (the product being sold). Then a full-width room photo,
+/* Hero = room photo as the stage, headline on a scrim, live booking tool on the right. Then
    services as tabs, a visit timeline drawn to scale in minutes, specialist, reviews template, contacts. */
 :root{
   --bg:oklch(0.975 0.004 350);
@@ -25,6 +25,7 @@
   --accent-ink:oklch(0.985 0.006 355);
   --accent-soft:oklch(0.945 0.022 355);
   --busy:oklch(0.76 0.01 350);
+  --on-photo:oklch(0.985 0.004 350);
   --error:oklch(0.52 0.15 40);
   --shadow:0 1px 0 oklch(0.85 0.01 350), 0 18px 40px -24px oklch(0.35 0.05 355 / .35);
   --font:"Onest",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
@@ -79,15 +80,32 @@ p{margin:0}
 .phone-top{font-size:15px;text-decoration:none}
 @media (max-width:860px){.nav{display:none}}
 
-/* hero */
-.hero{padding-block:56px 48px}
-.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:64px;align-items:start}
-.hero h1{font-size:clamp(40px,5.4vw,68px);font-weight:300;letter-spacing:-.045em;line-height:1.03;max-width:12ch;margin-top:8px}
-.hero-lead{margin-top:28px;max-width:34ch;font-size:19px;color:var(--muted)}
-.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
-.place{margin-top:56px;font-size:15px;color:var(--muted);display:grid;gap:2px}
-.place b{font-weight:500;color:var(--ink)}
-@media (max-width:980px){.hero .wrap{grid-template-columns:1fr;gap:40px}.place{margin-top:28px}}
+/* hero: the room photo is the stage, booking sits on it */
+.hero{padding-block:20px 0}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) 420px;min-height:min(720px,calc(100dvh - 104px))}
+.hero-photo{grid-column:1/-1;grid-row:1;margin:0;border-radius:var(--r-panel);overflow:hidden;position:relative;background:oklch(0.3 0.05 355)}
+.hero-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 62%;filter:saturate(.85)}
+.hero-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,oklch(0.17 0.02 350 / .82) 0%,oklch(0.17 0.02 350 / .6) 36%,oklch(0.17 0.02 350 / .18) 66%,oklch(0.17 0.02 350 / .05) 100%)}
+.copy{grid-column:1;grid-row:1;z-index:1;align-self:end;padding:56px 48px 52px 56px;color:var(--on-photo)}
+.hero h1{font-size:clamp(40px,5vw,66px);font-weight:300;letter-spacing:-.045em;line-height:1.03;max-width:13ch;color:inherit}
+.hero-lead{margin-top:24px;max-width:34ch;font-size:19px;color:oklch(0.97 0.005 350 / .84)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.btn-photo{border-color:oklch(0.98 0.004 350 / .45);color:var(--on-photo);background:transparent}
+.btn-photo:hover{border-color:var(--on-photo)}
+.place{margin-top:40px;font-size:15px;color:oklch(0.97 0.005 350 / .75);display:grid;gap:2px}
+.place b{font-weight:500;color:var(--on-photo)}
+.stage > .booking{grid-column:2;grid-row:1;z-index:2;align-self:center;margin:28px 28px 28px 0}
+@media (max-width:980px){
+  .stage{grid-template-columns:1fr;min-height:0}
+  .hero-photo{grid-column:1;grid-row:1;min-height:540px}
+  .hero-photo::after{background:linear-gradient(180deg,oklch(0.17 0.02 350 / .15) 0%,oklch(0.17 0.02 350 / .45) 40%,oklch(0.17 0.02 350 / .88) 100%)}
+  .copy{padding:28px 22px 64px;align-self:end}
+  .stage > .booking{grid-column:1;grid-row:2;margin:-36px 10px 0}
+  .place{margin-top:24px}
+}
+@media (max-width:420px){.hero-photo{min-height:560px}.copy{padding-inline:18px}}
+.sticky-cta{position:fixed;z-index:30;left:max(16px,env(safe-area-inset-left,0px));right:max(16px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 12px 30px -10px oklch(0.25 0.06 355 / .55)}
+@media (min-width:761px){.sticky-cta{display:none!important}}
 
 /* booking tool */
 .booking{background:var(--surface);border-radius:var(--r-panel);box-shadow:var(--shadow);padding:26px 24px 24px}
@@ -155,11 +173,6 @@ input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:tra
 .spinner{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* room photo band */
-.room{margin-top:8px}
-.room figure{margin:0;border-radius:var(--r-panel);overflow:hidden;aspect-ratio:21/8;background:var(--accent-soft)}
-.room img{width:100%;height:100%;object-fit:cover}
-@media (max-width:720px){.room figure{aspect-ratio:4/3}}
 
 /* services */
 .services{padding-block:104px 96px}
@@ -247,7 +260,10 @@ footer.site .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
   .hero h1,.hero-lead,.hero-cta{animation:rise .9s var(--ease) both}
   .hero-lead{animation-delay:.07s}.hero-cta{animation-delay:.14s}
   .booking{animation:rise 1s .2s var(--ease) both}
+  .hero-photo img{animation:settle 1.6s var(--ease) both}
+  .sticky-cta:not([hidden]){animation:rise .4s var(--ease) both}
 }
+@keyframes settle{from{transform:scale(1.05)}to{transform:none}}
 @keyframes rise{from{opacity:.001;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
@@ -270,12 +286,18 @@ footer.site .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
 <main id="top">
   <section class="hero">
     <div class="wrap">
-      <div>
+     <div class="stage">
+      <figure class="hero-photo">
+        <!-- Свои фото: положите файлы в папку img/ под этими именами, и сайт подхватит их сам -->
+        <img src="img/room.jpg" alt="Кабинет «Тишь»: кушетка у окна" width="1600" height="1067" fetchpriority="high"
+             data-fallback="https://images.pexels.com/photos/11774389/pexels-photo-11774389.jpeg?auto=compress&cs=tinysrgb&w=1800">
+      </figure>
+      <div class="copy">
         <h1>Косметология без спешки и лишних процедур</h1>
         <p class="hero-lead">Кабинет на одного клиента. Запишитесь онлайн, накануне пришлём напоминание.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" href="#booking" id="cta-book">Выбрать время</a>
-          <a class="btn btn-quiet" href="#services">Цены</a>
+          <a class="btn btn-photo" href="#services">Цены</a>
         </div>
         <p class="place"><b>ул. Тихая, 7, второй этаж</b><span>вт-вс, 10:00-21:00</span></p>
       </div>
@@ -336,16 +358,10 @@ footer.site .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
           <button type="button" class="btn btn-quiet b-submit" id="b-again">Записаться ещё</button>
         </div>
       </form>
+     </div>
     </div>
   </section>
 
-  <div class="room wrap">
-    <figure>
-      <!-- Свои фото: положите файлы в папку img/ под этими именами, и сайт подхватит их сам -->
-      <img src="img/room.jpg" alt="Кабинет: кушетка у окна, светлые стены" width="1024" height="1280"
-           data-fallback="https://images.pexels.com/photos/11774389/pexels-photo-11774389.jpeg?auto=compress&cs=tinysrgb&w=1600">
-    </figure>
-  </div>
 
   <section class="services" id="services">
     <div class="wrap">
@@ -418,6 +434,7 @@ footer.site .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:
       </dl>
     </div>
   </section>
+  <a class="sticky-cta btn btn-primary" id="sticky-cta" href="#booking" hidden>Выбрать время</a>
 </main>
 
 <footer class="site">

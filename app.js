@@ -210,4 +210,18 @@
   /* start on the first day that has a free slot */
   var f0 = firstFree(); state.day = f0 ? f0.di : 1;
   renderCombo(); renderDays(); renderSlots(); update(); renderPrice(0);
+
+  /* mobile: floating "Выбрать время" once the booking form has scrolled away */
+  var sticky = $("sticky-cta");
+  if ("IntersectionObserver" in window){
+    var vis = {booking:true, contacts:false};
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.target.id==="booking") vis.booking = en.isIntersecting || en.boundingClientRect.top > 0;
+        else vis.contacts = en.isIntersecting;
+      });
+      sticky.hidden = vis.booking || vis.contacts;
+    }, {threshold:0});
+    io.observe($("booking")); io.observe($("contacts"));
+  }
 })();
